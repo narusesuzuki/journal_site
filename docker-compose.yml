@@ -1,0 +1,54 @@
+# composeファイルのバージョン定義
+version: "3.6"
+
+# サービス(コンテナ)の定義
+services:
+  # appコンテナ
+  app:
+    # ビルドの設定
+    build:
+      # Dockerfileの場所をdocker-compose.ymlからの相対pathで指定
+      context: docker/app/
+      # build時に使用する環境変数を指定
+      args:
+        # <変数名>:<値>
+        APP_ROOT: /journal_site
+    # マウントするディレクトリを指定
+    volumes:
+      # <host-path>:<docker-path>:<option>
+      - .:/journal_site:cached
+      # <volumes>:<docker-path>
+      - bundle:/usr/local/bundle
+      - yarn-data:/usr/local/share/.cache/yarn
+      # volumesについてはhttp://docs.docker.jp/compose/compose-file.html#volumes-volume-driverを参照してください。
+    # appコンテナとmacのport番号3000番を接続
+    ports:
+      - 3000:3000
+    # tty(標準入出力)を使う
+    tty: true
+      # trueにすることでコンテナが入力待ちの状態で起動したままになる
+      # commandで設定しても起動したままにすることができる
+    # 連携するコンテナを指定(これでappを起動する前にdbを起動する)
+    depends_on:
+      - db
+
+  # dbコンテナ
+  db:
+    # Dockerfileの相対Path
+    build: docker/db/
+    # build後も使用出来る環境変数としてパスワードを設定
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    # データの保存場所を設定
+    volumes:
+      - "mysql-data:/var/lib/mysql"
+    ports:
+      - 3306:3306
+
+# データを永続化できる場所(コンテナが消えてもデータが残ります)
+# docker-compose down -vでコンテナの終了とボリュームの削除が同時にできます
+volumes:
+  # ボリュームの名前
+  bundle:
+  mysql-data:
+  yarn-data:
