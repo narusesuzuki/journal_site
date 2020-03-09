@@ -13,7 +13,7 @@ class ArticlesController < ApplicationController
 
   def create
 
-    @article = Article.new(article_params)#リクエストのパラメータを使って本のデータを作る
+      @article = Article.new(article_params)#リクエストのパラメータを使って本のデータを作る
   
       # 上の行はインスタンスを作っただけ。saveメソッドで保存しないと、消える。
       @article.save
