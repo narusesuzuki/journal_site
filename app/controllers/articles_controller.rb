@@ -20,7 +20,7 @@ class ArticlesController < ApplicationController
   
       # saveの後にshow(本の詳細ページ)に飛ぶ設定をします。
       # これを設定しないと、プログラムが行き場をなくしてエラーが起きます。
-      redirect_to @article
+      redirect_to "/articles"
   end
 
   def edit
@@ -52,6 +52,4 @@ class ArticlesController < ApplicationController
     def article_params
       params.require(:article).permit(:title, :body)
     end
-
-    
 end
