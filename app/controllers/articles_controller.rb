@@ -13,14 +13,14 @@ class ArticlesController < ApplicationController
 
   def create
 
-    @article = Article.new(article_params)#リクエストのパラメータを使って本のデータを作る
+      @article = Article.new(article_params)#リクエストのパラメータを使って本のデータを作る
   
       # 上の行はインスタンスを作っただけ。saveメソッドで保存しないと、消える。
       @article.save
   
       # saveの後にshow(本の詳細ページ)に飛ぶ設定をします。
       # これを設定しないと、プログラムが行き場をなくしてエラーが起きます。
-      redirect_to @article
+      redirect_to articles_path
   end
 
   def edit
@@ -30,7 +30,7 @@ class ArticlesController < ApplicationController
     def update
       @article = Article.find(params[:id])
       @article.update(article_params)
-      redirect_to @article
+      redirect_to articles_path
     end
 
     def destroy
@@ -52,6 +52,4 @@ class ArticlesController < ApplicationController
     def article_params
       params.require(:article).permit(:title, :body)
     end
-
-    
 end
